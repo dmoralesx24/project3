@@ -1,18 +1,22 @@
 import React, { Component } from "react";
-import DeleteBtn from "../components/DeleteBtn";
+import SaveBtn from "../components/SaveBtn";
 import Jumbotron from "../components/Jumbotron";
 import API from "../utils/API";
-import { Link } from "react-router-dom";
 import { Col, Row, Container } from "../components/Grid";
 import { List, ListItem } from "../components/List";
-import { Input, TextArea, FormBtn } from "../components/Form";
+import MuscleList from "../components/MuscleList";
+import "../styles/home.css";
+import Footer from "../components/Footer"
+
 
 class Books extends Component {
   state = {
     books: [],
     title: "",
-    author: "",
-    synopsis: ""
+    link: "",
+    muscle: "",
+    equipment: "",
+    hide: false
   };
 
   componentDidMount() {
@@ -20,49 +24,59 @@ class Books extends Component {
   }
 
   loadBooks = () => {
-    API.getBooks()
-      .then(res =>
-        this.setState({ books: res.data, title: "", author: "", synopsis: "" })
-      )
-      .catch(err => console.log(err));
-  };
-
-  deleteBook = id => {
-    API.deleteBook(id)
-      .then(res => this.loadBooks())
-      .catch(err => console.log(err));
-  };
-
-  handleInputChange = event => {
-    const { name, value } = event.target;
-    this.setState({
-      [name]: value
-    });
-  };
-
-  handleFormSubmit = event => {
-    event.preventDefault();
-    if (this.state.title && this.state.author) {
-      API.saveBook({
-        title: this.state.title,
-        author: this.state.author,
-        synopsis: this.state.synopsis
+    API.getExercises()
+      .then(res => {
+        this.setState({
+          books: res.data,
+          title: "",
+          link: "",
+          muscle: "",
+          equipment: ""
+        });
       })
-        .then(res => this.loadBooks())
-        .catch(err => console.log(err));
+      .catch(err => console.log(err));
+  };
+
+  // for hiding exercise when clicked saved to workout
+  // hidingCard = () => {
+  //   if(this.state.hide == true) {
+  //     this.
+  //   }
+  // }
+
+  saveExercise = (id, title, link, muscle, equipment) => {
+    API.saveExercise(id, title, link, muscle, equipment)
+      .then(res => console.log(res.data), this.loadBooks(), this.setState({
+        hide: true
+      }))
+      .catch(err => console.log(err));
+  };
+
+  // getExercise = () => {
+  //   API.getExercise(muscle)
+  //   .then(res => this.loadBooks())
+  //   .catch(err => console.log(err));
+  // }
+
+
+  handleMuscleTarget = event => {
+    event.preventDefault();
+    if (this.state.muscle) {
+      API.getExercise();
     }
   };
 
   render() {
     return (
-      <Container fluid>
-        <Row>
-          <Col size="md-6">
-            <Jumbotron>
-              <h1>What Books Should I Read?</h1>
-            </Jumbotron>
-            <form>
-              <Input
+      <div className="background-page">
+        <Container fluid>
+          <Row>
+            <Col size="sm-3">
+              <Jumbotron>
+                <h1>Muscle Group</h1>
+              </Jumbotron>
+              <MuscleList />
+              {/* <Input
                 value={this.state.title}
                 onChange={this.handleInputChange}
                 name="title"
@@ -85,32 +99,43 @@ class Books extends Component {
                 onClick={this.handleFormSubmit}
               >
                 Submit Book
-              </FormBtn>
-            </form>
-          </Col>
-          <Col size="md-6 sm-12">
-            <Jumbotron>
-              <h1>Books On My List</h1>
-            </Jumbotron>
-            {this.state.books.length ? (
-              <List>
-                {this.state.books.map(book => (
-                  <ListItem key={book._id}>
-                    <Link to={"/books/" + book._id}>
-                      <strong>
-                        {book.title} by {book.author}
-                      </strong>
-                    </Link>
-                    <DeleteBtn onClick={() => this.deleteBook(book._id)} />
-                  </ListItem>
-                ))}
-              </List>
-            ) : (
-              <h3>No Results to Display</h3>
-            )}
-          </Col>
-        </Row>
-      </Container>
+              </FormBtn> */}
+            </Col>
+            <Col size="md-9">
+              <Jumbotron>
+                <h1>Exercises</h1>
+              </Jumbotron>
+              {this.state.books.length ? (
+                <List>
+                  {this.state.books.map((book, index) => (
+                    <ListItem key={index}>
+                      <a href={"https://www.bodybuilding.com/" + book.link}>
+                        <h2>{book.title}</h2>
+                        <h5>Muscle Target : {book.muscle}</h5>
+                        <h5>Equipment : {book.equipment}</h5>
+                      </a>
+                      <SaveBtn
+                        onClick={() =>
+                          this.saveExercise(
+                            book._id,
+                            book.title,
+                            book.link,
+                            book.muscle,
+                            book.equipment
+                          )
+                        }
+                      />
+                    </ListItem>
+                  ))}
+                </List>
+              ) : (
+                <h3>No Results to Display</h3>
+              )}
+            </Col>
+          </Row>
+        </Container>
+        <Footer/>
+      </div>
     );
   }
 }
