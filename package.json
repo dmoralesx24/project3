@@ -9,7 +9,6 @@
     "client": "cd client && npm run start",
     "seed": "node scripts/seedDB.js",
     "install": "cd client && npm install",
-    "build": "cd client && npm run build",
     "heroku-postbuild": "npm run build"
   },
   "author": "",
@@ -30,7 +29,7 @@
     "mongoose": "^5.7.4",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
-    "yarn": "^1.19.1"
+    "merge-config" :"2.0.0"
   },
   "description": ""
 }
