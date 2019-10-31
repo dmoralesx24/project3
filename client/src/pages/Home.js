@@ -41,7 +41,7 @@ function HomePage() {
           <br/>
           <Row>
             <Col size="md-12">
-              <h5 className="containerText">Fitness Journey is an online web application that allows you to search the a huge database of exercises to create and manage a workout routine. You'll also be able to create a nutrion plan for yourself and keep track of your body mass index as well as your weight and be able to create goals.</h5>
+              <h5 className="containerText">Fitness Journey is an online web application that allows you to search a huge database of exercises to create and manage a workout routine. You'll also be able to create a nutrion plan for yourself and keep track of your body mass index as well as your weight and be able to create goals.</h5>
               <h3 className="containerText">Start your Fitness Journey here!</h3>
             </Col>
           </Row>
@@ -55,7 +55,7 @@ function HomePage() {
               <h3 className="containerText">Nutrition</h3>
             </Col>
             <Col size="md-4">
-              <h3 className="containerText">goals</h3>
+              <h3 className="containerText">Goals</h3>
             </Col>
           </Row>
         </Container>
